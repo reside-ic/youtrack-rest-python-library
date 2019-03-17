@@ -4,7 +4,9 @@ import httplib2 as httplib2
 
 
 from http.client import HTTPException
-from .RequestEngine import RequestEngine, RequestType
+
+from YTClient.YTDataClasses import Project, Command
+from YTClient.RequestEngine import RequestEngine, RequestType
 
 
 class YTException(HTTPException):
@@ -52,14 +54,22 @@ class YTClient(object):
         if token:
             self.headers = {'Authorization': 'Bearer {}'.format(token)}
 
-    def create_issue(self, project, summary: str, description: str = None, return_fields: str = None):
-        issue_info = {'project': project,
+    def create_issue(self, project: Project, summary: str, description: str = None, additional_fields: dict = None, return_fields: str = None):
+        issue_info = {'project': project._asdict(),
                       'summary': summary,
                       'description': description}
+
+        if additional_fields:
+            issue_info = {**issue_info, **additional_fields}
 
         self.headers['Cache-Control'] = 'no-cache'
 
         return self.__request(RequestType.POST, '/issues', return_fields, issue_info)
+
+    def run_command(self, command: Command, return_fields: str = None):
+        command_dict = command._asdict()
+
+        return self.__request(RequestType.POST, '/commands', return_fields, command_dict)
 
     def get_issues(self, query: str, fields: str = None, skip: int = None, top: int = None):
         return_fields = {'query': query}
