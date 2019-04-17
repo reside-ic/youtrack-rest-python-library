@@ -34,6 +34,8 @@ class YTException(HTTPException):
 
 
 class YTClient(object):
+    FIELDS_PARAMETER = 'fields'
+
     def __init__(self, url, proxy_info=None, token=None):
         if proxy_info:
             self.http_client = httplib2.Http(disable_ssl_certificate_validation=True, proxy_info=proxy_info)
@@ -54,7 +56,8 @@ class YTClient(object):
         if token:
             self.headers = {'Authorization': 'Bearer {}'.format(token)}
 
-    def create_issue(self, project: Project, summary: str, description: str = None, additional_fields: dict = None, return_fields: str = None):
+    def create_issue(self, project: Project, summary: str, description: str = None, additional_fields: dict = None,
+                     return_fields: list = None):
         issue_info = {'project': project._asdict(),
                       'summary': summary,
                       'description': description}
@@ -64,18 +67,18 @@ class YTClient(object):
 
         self.headers['Cache-Control'] = 'no-cache'
 
-        return self.__request(RequestType.POST, '/issues', return_fields, issue_info)
+        return self.__request(RequestType.POST, '/issues', {self.FIELDS_PARAMETER: return_fields}, issue_info)
 
-    def run_command(self, command: Command, return_fields: str = None):
+    def run_command(self, command: Command, return_fields: list = None):
         command_dict = command._asdict()
 
-        return self.__request(RequestType.POST, '/commands', return_fields, command_dict)
+        return self.__request(RequestType.POST, '/commands', {self.FIELDS_PARAMETER: return_fields}, command_dict)
 
     def get_issues(self, query: str, fields: str = None, skip: int = None, top: int = None):
         return_fields = {'query': query}
 
         if fields:
-            return_fields['fields'] = fields
+            return_fields[self.FIELDS_PARAMETER] = fields
         if skip:
             return_fields['$skip'] = skip
         if top:
@@ -87,7 +90,7 @@ class YTClient(object):
         return_fields = dict()
 
         if fields:
-            return_fields['fields'] = fields
+            return_fields[self.FIELDS_PARAMETER] = fields
         if skip:
             return_fields['$skip'] = skip
         if top:
