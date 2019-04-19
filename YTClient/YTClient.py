@@ -80,11 +80,11 @@ class YTClient(object):
 
         return self.__request(RequestType.POST, '/commands', return_fields, command_dict)
 
-    def get_issues(self, query: str, fields: str = None, skip: int = None, top: int = None):
+    def get_issues(self, query: str, fields: list = None, skip: int = None, top: int = None):
         return_fields = {'query': query}
 
         if fields:
-            return_fields[self.FIELDS_PARAMETER] = fields
+            return_fields[self.FIELDS_PARAMETER] = ','.join(fields)
         if skip:
             return_fields['$skip'] = skip
         if top:
@@ -92,11 +92,11 @@ class YTClient(object):
 
         return self.__request(RequestType.GET, '/issues', return_fields)
 
-    def get_projects(self, fields: str = None, skip: int = None, top: int = None):
+    def get_projects(self, fields: list = None, skip: int = None, top: int = None):
         return_fields = dict()
 
         if fields:
-            return_fields[self.FIELDS_PARAMETER] = fields
+            return_fields[self.FIELDS_PARAMETER] = ','.join(fields)
         if skip:
             return_fields['$skip'] = skip
         if top:
