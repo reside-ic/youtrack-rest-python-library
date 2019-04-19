@@ -67,12 +67,18 @@ class YTClient(object):
 
         self.headers['Cache-Control'] = 'no-cache'
 
-        return self.__request(RequestType.POST, '/issues', {self.FIELDS_PARAMETER: return_fields}, issue_info)
+        if return_fields:
+            return_fields = {self.FIELDS_PARAMETER: ','.join(return_fields)}
+
+        return self.__request(RequestType.POST, '/issues', return_fields, issue_info)
 
     def run_command(self, command: Command, return_fields: list = None):
         command_dict = command._asdict()
 
-        return self.__request(RequestType.POST, '/commands', {self.FIELDS_PARAMETER: return_fields}, command_dict)
+        if return_fields:
+            return_fields = {self.FIELDS_PARAMETER: ','.join(return_fields)}
+
+        return self.__request(RequestType.POST, '/commands', return_fields, command_dict)
 
     def get_issues(self, query: str, fields: str = None, skip: int = None, top: int = None):
         return_fields = {'query': query}
