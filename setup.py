@@ -9,5 +9,6 @@ setup(
     author_email='',
     description='A rewrite of the YouTrack python API',
     packages=['YTClient'],
-    install_requires=['six>=1.12.0', 'httplib2>=0.12.1']
+    install_requires=['six>=1.12.0', 'httplib2>=0.12.1'],
+    python_requires='>=3.6'
 )
