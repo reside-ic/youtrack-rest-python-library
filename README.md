@@ -51,7 +51,7 @@ Currently YTClient only supports the following operations:
    - Args
       - **[REQ] command** - The command to run. Uses a named tuple that contains the command to run (specified as query in the command tuple) 
         and a list of issues that the command is to run against.
-      - **[OPT] return_fields**** - A list of fields that should be returned with the request. The command ID is returned by default.
+      - **[OPT] return_fields** - A list of fields that should be returned with the request. The command ID is returned by default.
 - **get_issues** - Get a list of issues that match the specified query
    - Args
       - **[REQ] query** - The query string to use
