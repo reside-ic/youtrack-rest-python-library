@@ -15,7 +15,13 @@ This library supports any YouTrack Standalone versions that supports the new [RE
 as well as the current version of YouTrack InCloud. The REST API is enabled by default in all YouTrack installations.
 
 ## Getting Started
-**TODO: Update once project is posted on PyPi**
+This package has been published to PyPI and can be installed with pip. 
+
+`pip install YTClient`
+
+Alternatively you can clone this repo and run setup.py.
+
+`setup.py install`
 
 ## Authentication
 YTClient currently only supports using a permanent token for authentication requests. You can generate your own permanent 
