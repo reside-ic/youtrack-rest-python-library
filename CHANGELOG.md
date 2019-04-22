@@ -27,3 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - youtrack & youtrack.sync
 - JBOfficial tag from README
 - MANIFEST.in
+
+[Unreleased]: https://github.com/JoshLee0915/youtrack-rest-python-library/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/JoshLee0915/youtrack-rest-python-library/releases/tag/v1.0.0
