@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(
-    name='youtrack-rest-python-library',
-    version='0.0.1-alpha',
+    name='YTClient',
+    version='1.0.1',
     url='https://github.com/JoshLee0915/youtrack-rest-python-library',
     license='https://github.com/JoshLee0915/youtrack-rest-python-library/blob/master/LICENSE',
     author='Josh Lee',

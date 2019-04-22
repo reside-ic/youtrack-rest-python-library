@@ -34,6 +34,8 @@ class YTException(HTTPException):
 
 
 class YTClient(object):
+    FIELDS_PARAMETER = 'fields'
+
     def __init__(self, url, proxy_info=None, token=None):
         if proxy_info:
             self.http_client = httplib2.Http(disable_ssl_certificate_validation=True, proxy_info=proxy_info)
@@ -54,7 +56,8 @@ class YTClient(object):
         if token:
             self.headers = {'Authorization': 'Bearer {}'.format(token)}
 
-    def create_issue(self, project: Project, summary: str, description: str = None, additional_fields: dict = None, return_fields: str = None):
+    def create_issue(self, project: Project, summary: str, description: str = None, additional_fields: dict = None,
+                     return_fields: list = None):
         issue_info = {'project': project._asdict(),
                       'summary': summary,
                       'description': description}
@@ -64,18 +67,24 @@ class YTClient(object):
 
         self.headers['Cache-Control'] = 'no-cache'
 
+        if return_fields:
+            return_fields = {self.FIELDS_PARAMETER: ','.join(return_fields)}
+
         return self.__request(RequestType.POST, '/issues', return_fields, issue_info)
 
-    def run_command(self, command: Command, return_fields: str = None):
+    def run_command(self, command: Command, return_fields: list = None):
         command_dict = command._asdict()
+
+        if return_fields:
+            return_fields = {self.FIELDS_PARAMETER: ','.join(return_fields)}
 
         return self.__request(RequestType.POST, '/commands', return_fields, command_dict)
 
-    def get_issues(self, query: str, fields: str = None, skip: int = None, top: int = None):
+    def get_issues(self, query: str, fields: list = None, skip: int = None, top: int = None):
         return_fields = {'query': query}
 
         if fields:
-            return_fields['fields'] = fields
+            return_fields[self.FIELDS_PARAMETER] = ','.join(fields)
         if skip:
             return_fields['$skip'] = skip
         if top:
@@ -83,11 +92,11 @@ class YTClient(object):
 
         return self.__request(RequestType.GET, '/issues', return_fields)
 
-    def get_projects(self, fields: str = None, skip: int = None, top: int = None):
+    def get_projects(self, fields: list = None, skip: int = None, top: int = None):
         return_fields = dict()
 
         if fields:
-            return_fields['fields'] = fields
+            return_fields[self.FIELDS_PARAMETER] = ','.join(fields)
         if skip:
             return_fields['$skip'] = skip
         if top:
