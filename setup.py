@@ -3,7 +3,7 @@ from setuptools import setup
 
 ROOT_DIR = pathlib.Path(__file__).parent
 
-README = (ROOT_DIR/'README.md')
+README = (ROOT_DIR/'README.md').read_text()
 
 setup(
     name='YTClient',
