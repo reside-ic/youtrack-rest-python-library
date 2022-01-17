@@ -75,6 +75,21 @@ class YTClient(object):
         return self.__request(RequestType.POST, '/issues', return_fields,
                               issue_info)
 
+    def create_tag(self, name: str, visible_for: dict = None,
+                   return_fields: list = None):
+        tag_info = {'name': name}
+
+        if visible_for:
+            tag_info = {**tag_info, **visible_for}
+
+        self.headers['Cache-Control'] = 'no-cache'
+
+        if return_fields:
+            return_fields = {self.FIELDS_PARAMETER: ','.join(return_fields)}
+
+        return self.__request(RequestType.POST, '/issueTags', return_fields,
+                              tag_info)
+
     def update_issue(self, issue: Issue, summary: str, description: str = None,
                      additional_fields: dict = None,
                      return_fields: list = None):
