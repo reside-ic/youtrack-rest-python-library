@@ -131,6 +131,19 @@ class YTClient(object):
 
         return self.__request(RequestType.GET, '/issues', return_fields)
 
+    def get_tags(self, fields: list = None, skip: int = None,
+                   top: int = None):
+        return_fields = {}
+
+        if fields:
+            return_fields[self.FIELDS_PARAMETER] = ','.join(fields)
+        if skip:
+            return_fields['$skip'] = skip
+        if top:
+            return_fields['$top'] = top
+
+        return self.__request(RequestType.GET, '/issueTags', return_fields)
+
     def get_projects(self, fields: list = None, skip: int = None,
                      top: int = None):
         return_fields = dict()
