@@ -38,10 +38,10 @@ class YTClient(object):
     def __init__(self, url, proxy_info=None, token=None):
         if proxy_info:
             self.http_client = httplib2.Http(
-                disable_ssl_certificate_validation=True, proxy_info=proxy_info)
+                disable_ssl_certificate_validation=False, proxy_info=proxy_info)
         else:
             self.http_client = httplib2.Http(
-                disable_ssl_certificate_validation=True)
+                disable_ssl_certificate_validation=False)
 
         self.baseUrl = url.rstrip('/')
         self.apiUrl = self.baseUrl + '/api'
