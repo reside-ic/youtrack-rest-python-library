@@ -1,6 +1,7 @@
 import json
 import urllib.parse
 import httplib2 as httplib2
+import logging
 
 from http.client import HTTPException
 
@@ -171,6 +172,8 @@ class YTClient(object):
         body_json = None
         if request_body:
             body_json = json.dumps(request_body)
+
+        logging.info(f"YTClient requesting to {request_url}"")
 
         resp, json_content = RequestEngine.send_request(self.http_client,
                                                         request_type,
