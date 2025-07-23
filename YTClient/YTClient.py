@@ -87,7 +87,7 @@ class YTClient(object):
         if return_fields:
             return_fields = {self.FIELDS_PARAMETER: ','.join(return_fields)}
 
-        return self.__request(RequestType.POST, '/issueTags', return_fields,
+        return self.__request(RequestType.POST, '/tags', return_fields,
                               tag_info)
 
     def update_issue(self, issue: Issue, summary: str, description: str = None,
@@ -142,7 +142,7 @@ class YTClient(object):
         if top:
             return_fields['$top'] = top
 
-        return self.__request(RequestType.GET, '/issueTags', return_fields)
+        return self.__request(RequestType.GET, '/tags', return_fields)
 
     def get_projects(self, fields: list = None, skip: int = None,
                      top: int = None):
