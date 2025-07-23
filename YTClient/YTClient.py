@@ -1,7 +1,6 @@
 import json
 import urllib.parse
 import httplib2 as httplib2
-import logging
 
 from http.client import HTTPException
 
@@ -19,15 +18,18 @@ class YTException(HTTPException):
     def error_description(self):
         return self.content['error_description']
 
-    def __init__(self, response, content):
+    def __init__(self, response, content, url=None):
         self.response = response
         self.content = content
+        self.url = url
 
     def __repr__(self):
-        return "Code: {code}, Error: {error}, Error Description: {description}" \
+        result = "Code: {code}, Error: {error}, Error Description: {description}" \
             .format(code=self.error_code(),
                     error=self.error(),
                     description=self.error_description())
+        if url is not None:
+            result = result + f" Url: {url}"
 
     def __str__(self):
         return self.__repr__()
@@ -173,8 +175,6 @@ class YTClient(object):
         if request_body:
             body_json = json.dumps(request_body)
 
-        logging.warning(f"YTClient requesting to {request_url}"")
-
         resp, json_content = RequestEngine.send_request(self.http_client,
                                                         request_type,
                                                         request_url,
@@ -183,6 +183,6 @@ class YTClient(object):
         content = json.loads(json_content)
 
         if resp.status != 200:
-            raise YTException(resp, content)
+            raise YTException(resp, content, request_url)
 
         return content
