@@ -18,15 +18,19 @@ class YTException(HTTPException):
     def error_description(self):
         return self.content['error_description']
 
-    def __init__(self, response, content):
+    def __init__(self, response, content, request=None):
         self.response = response
         self.content = content
+        self.request = request
 
     def __repr__(self):
-        return "Code: {code}, Error: {error}, Error Description: {description}" \
+        result = "Status code: {code}, Error: {error}, Error Description: {description}" \
             .format(code=self.error_code(),
                     error=self.error(),
                     description=self.error_description())
+        if self.request is not None:
+            result = result + f" Request: {self.request}"
+        return result
 
     def __str__(self):
         return self.__repr__()
@@ -87,7 +91,7 @@ class YTClient(object):
         if return_fields:
             return_fields = {self.FIELDS_PARAMETER: ','.join(return_fields)}
 
-        return self.__request(RequestType.POST, '/issueTags', return_fields,
+        return self.__request(RequestType.POST, '/tags', return_fields,
                               tag_info)
 
     def update_issue(self, issue: Issue, summary: str, description: str = None,
@@ -142,7 +146,7 @@ class YTClient(object):
         if top:
             return_fields['$top'] = top
 
-        return self.__request(RequestType.GET, '/issueTags', return_fields)
+        return self.__request(RequestType.GET, '/tags', return_fields)
 
     def get_projects(self, fields: list = None, skip: int = None,
                      top: int = None):
@@ -180,6 +184,7 @@ class YTClient(object):
         content = json.loads(json_content)
 
         if resp.status != 200:
-            raise YTException(resp, content)
+            request = f"{request_type} {request_url} {body_json}"
+            raise YTException(resp, content, request)
 
         return content
