@@ -24,12 +24,13 @@ class YTException(HTTPException):
         self.url = url
 
     def __repr__(self):
-        result = "Code: {code}, Error: {error}, Error Description: {description}" \
+        result = "Status code: {code}, Error: {error}, Error Description: {description}" \
             .format(code=self.error_code(),
                     error=self.error(),
                     description=self.error_description())
         if url is not None:
             result = result + f" Url: {url}"
+        return result
 
     def __str__(self):
         return self.__repr__()
