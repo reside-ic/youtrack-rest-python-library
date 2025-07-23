@@ -173,7 +173,7 @@ class YTClient(object):
         if request_body:
             body_json = json.dumps(request_body)
 
-        logging.info(f"YTClient requesting to {request_url}"")
+        logging.warning(f"YTClient requesting to {request_url}"")
 
         resp, json_content = RequestEngine.send_request(self.http_client,
                                                         request_type,
