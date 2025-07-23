@@ -18,18 +18,18 @@ class YTException(HTTPException):
     def error_description(self):
         return self.content['error_description']
 
-    def __init__(self, response, content, url=None):
+    def __init__(self, response, content, request=None):
         self.response = response
         self.content = content
-        self.url = url
+        self.request = request
 
     def __repr__(self):
         result = "Status code: {code}, Error: {error}, Error Description: {description}" \
             .format(code=self.error_code(),
                     error=self.error(),
                     description=self.error_description())
-        if self.url is not None:
-            result = result + f" Url: {self.url}"
+        if self.request is not None:
+            result = result + f" Request: {self.request}"
         return result
 
     def __str__(self):
@@ -184,6 +184,7 @@ class YTClient(object):
         content = json.loads(json_content)
 
         if resp.status != 200:
-            raise YTException(resp, content, request_url)
+            request = f"{request_type} {request_url} {body_json}"
+            raise YTException(resp, content, request)
 
         return content
